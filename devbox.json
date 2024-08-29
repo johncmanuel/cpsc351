@@ -7,18 +7,19 @@
   ],
   "shell": {
     "init_hook": [
-      "projectDir=$(dirname $(readlink -f \"$0\"))",
-      "rustupHomeDir=\"$projectDir\"/.rustup",
-      "mkdir -p $rustupHomeDir",
-      "export RUSTUP_HOME=$rustupHomeDir",
-      "export LIBRARY_PATH=$LIBRARY_PATH:\"$projectDir/nix/profile/default/lib\"",
-      "rustup default stable",
-      "cargo fetch"
+      // "projectDir=$(dirname $(readlink -f \"$0\"))",
+      // "rustupHomeDir=\"$projectDir\"/.rustup",
+      // "mkdir -p $rustupHomeDir",
+      // "export RUSTUP_HOME=$rustupHomeDir",
+      // "export LIBRARY_PATH=$LIBRARY_PATH:\"$projectDir/nix/profile/default/lib\"",
+      // "rustup default stable",
+      // "cargo fetch"
     ],
+    // TODO: Create scripts for compiling and running projects
     "scripts": {
-      "test":       "cargo test -- --show-output",
-      "start":      "cargo run",
-      "build-docs": "cargo doc"
+      // "test":       "cargo test -- --show-output",
+      // "start":      "cargo run",
+      // "build-docs": "cargo doc"
     }
   }
 }
