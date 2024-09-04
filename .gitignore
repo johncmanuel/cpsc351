@@ -1,5 +1,7 @@
 .devbox
 
+*.output
+
 # Prerequisites
 *.d
 
