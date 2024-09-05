@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    "*.ini": "plaintext",
+    "stdlib.h": "c"
+  }
+}
