@@ -23,7 +23,7 @@ int main(int argc, const char* argv[]) {
         dup2(p[1], STDOUT_FILENO);
         close(p[1]);
 
-        char* args[] = { strdup("grep"), strdup("-o"), strdup("fork"), strdup("q4.c"), NULL };
+        char* args[] = { strdup("grep"), strdup("-o"), strdup("close"), strdup("q6.c"), NULL };
         execvp(args[0], args);
     }
 
@@ -40,7 +40,6 @@ int main(int argc, const char* argv[]) {
         execvp(args[0], args);
     }
 
-    // close pipe
     close(p[0]);
     close(p[1]);
 
