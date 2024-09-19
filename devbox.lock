@@ -2,8 +2,8 @@
   "lockfile_version": "1",
   "packages": {
     "clang@18.1.8": {
-      "last_modified": "2024-08-14T11:41:26Z",
-      "resolved": "github:NixOS/nixpkgs/0cb2fd7c59fed0cd82ef858cbcbdb552b9a33465#clang",
+      "last_modified": "2024-09-10T15:01:03Z",
+      "resolved": "github:NixOS/nixpkgs/5ed627539ac84809c78b2dd6d26a5cebeb5ae269#clang",
       "source": "devbox-search",
       "version": "18.1.8",
       "systems": {
@@ -11,21 +11,21 @@
           "outputs": [
             {
               "name": "out",
-              "path": "/nix/store/2abmvm4r3all81d5b8hr3ydjwjabx4lw-clang-wrapper-18.1.8",
+              "path": "/nix/store/r05x7gzyxq4j1yj6vqbjwcc41yaab948-clang-wrapper-18.1.8",
               "default": true
             }
           ],
-          "store_path": "/nix/store/2abmvm4r3all81d5b8hr3ydjwjabx4lw-clang-wrapper-18.1.8"
+          "store_path": "/nix/store/r05x7gzyxq4j1yj6vqbjwcc41yaab948-clang-wrapper-18.1.8"
         },
         "x86_64-linux": {
           "outputs": [
             {
               "name": "out",
-              "path": "/nix/store/k4l2mg07nyd7flfkxgbz63j63hnwfvnw-clang-wrapper-18.1.8",
+              "path": "/nix/store/4rz4z2bkb68vwbdxcwq0jxh2fyhhiqkh-clang-wrapper-18.1.8",
               "default": true
             }
           ],
-          "store_path": "/nix/store/k4l2mg07nyd7flfkxgbz63j63hnwfvnw-clang-wrapper-18.1.8"
+          "store_path": "/nix/store/4rz4z2bkb68vwbdxcwq0jxh2fyhhiqkh-clang-wrapper-18.1.8"
         }
       }
     },
