@@ -40,9 +40,18 @@ int main(int arg, char *argv[]) {
   while (1) {
     printf("shell> ");
     fgets(line, 1024, stdin);
-    printf("\n");
     printf("line: %s\n", line);
+
     parse(line, args);
+
+    // Print out the arguments
+    for (int i = 0; args[i] != NULL; i++) {
+      printf("arg[%d]: %s\n", i, args[i]);
+      if (strcmp(args[i], "|") == 0) {
+        printf("PIPE\n");
+      }
+    }
+
     if (strcmp(args[0], "exit") == 0) {
       exit(0);
     }
