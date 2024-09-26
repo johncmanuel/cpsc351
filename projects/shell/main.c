@@ -50,6 +50,17 @@ void execute(char **argv) {
     if (strcmp(argv[length - 2], "ECHO") == 0) {
       for (int i = 0; i < length - 1; i++) {
         printf("%s\n", argv[i]);
+
+        // There is technically a space char for each argument provided
+        // so, print SPACE until the last argument, ECHO
+        if (i != length - 2) {
+          printf("SPACE\n");
+        }
+
+        // Print PIPE if the current argument is a pipe character
+        if (strcmp(argv[i], "|") == 0) {
+          printf("PIPE\n");
+        }
       }
     }
 
@@ -72,23 +83,12 @@ int main(int arg, char *argv[]) {
     printf("shell> ");
     fgets(line, 1024, stdin);
     printf("line: %s", line);
-
-    // Print SPACE and/or PIPE for each space or pipe character respectively
-    for (int i = 0; i < strlen(line); i++) {
-      if (line[i] == ' ') {
-        printf("SPACE\n");
-      } else if (line[i] == '|') {
-        printf("PIPE\n");
-      }
-    }
-    printf("====================================\n");
-
     parse(line, args);
 
     if (strcmp(args[0], "exit") == 0) {
       exit(0);
     } else if (strcmp(args[0], "help") == 0) {
-      printf("This is a simple shell program\n");
+      printf("This is a simple Unix shell program\n");
       printf("Here are the following commands:\n");
       printf("cd, mkdir, exit, !!");
       printf("Type 'exit' to exit the shell\n");
