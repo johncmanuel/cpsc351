@@ -24,7 +24,7 @@ void parse(char *line, char **argv) {
   *argv = NULL;
 }
 
-void execute(char **argv) {
+void execute(char **argv, char **prev_args) {
   pid_t pid;
   int status;
   if ((pid = fork()) < 0) {
@@ -51,15 +51,21 @@ void execute(char **argv) {
       // wait for something
     }
   }
+  // Copy the current args to prev_args
+  for (int i = 0; i < arr_len(argv); i++) {
+    prev_args[i] = argv[i];
+  }
 }
 
 int main(int arg, char *argv[]) {
   char line[1024];
   char *args[64];
+  char *prev_args[64];
+
   while (1) {
     printf("shell> ");
     fgets(line, 1024, stdin);
-    printf("line: %s\n", line);
+    printf("line: %s", line);
 
     // Print SPACE and/or PIPE for each space or pipe character respectively
     for (int i = 0; i < strlen(line); i++) {
@@ -75,7 +81,18 @@ int main(int arg, char *argv[]) {
 
     if (strcmp(args[0], "exit") == 0) {
       exit(0);
+    } else if (strcmp(args[0], "help") == 0) {
+      printf("This is a simple shell program\n");
+      printf("Here are the following commands:\n");
+      printf("cd, mkdir, exit, !!");
+      printf("Type 'exit' to exit the shell\n");
+      continue;
+    } else if (strcmp(args[0], "!!") == 0) {
+      if (prev_args[0] == NULL) {
+        printf("No previous command\n");
+        continue;
+      }
     }
-    execute(args);
+    execute(args, prev_args);
   }
 }
