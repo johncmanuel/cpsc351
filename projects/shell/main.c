@@ -16,6 +16,8 @@ int arr_len(char **arr) {
   return length;
 }
 
+int run_cd(char *path) { return chdir(path); }
+
 void save_prev_args(char **src, char **dst) {
   int i = 0;
   while (src[i] != NULL) {
@@ -23,6 +25,14 @@ void save_prev_args(char **src, char **dst) {
     i++;
   }
   dst[i] = NULL;
+}
+
+void get_cwd(char *cwd, size_t size) {
+  if (getcwd(cwd, size) != NULL) {
+    printf("Current directory: %s\n", cwd);
+  } else {
+    perror("getcwd() error");
+  }
 }
 
 void parse(char *line, char **argv) {
@@ -86,11 +96,7 @@ int main(int arg, char *argv[]) {
   char *args[64];
 
   // Get current working directory
-  if (getcwd(cwd, sizeof(cwd)) != NULL) {
-    printf("Current directory: %s\n", cwd);
-  } else {
-    perror("getcwd() error");
-  }
+  get_cwd(cwd, sizeof(cwd));
 
   while (1) {
     printf("%s > ", cwd);
@@ -117,7 +123,20 @@ int main(int arg, char *argv[]) {
       printf("Executing previous command\n");
       execute(prev_args);
       continue;
+    } else if (strcmp(args[0], "cd") == 0) {
+      if (args[1] == NULL) {
+        printf("No directory provided\n");
+        continue;
+      }
+      if (run_cd(args[1]) == 0) {
+        printf("Changed directory to %s\n", args[1]);
+        get_cwd(cwd, sizeof(cwd));
+      } else {
+        printf("Failed to change directory\n");
+      }
+      continue;
     }
+
     // Track previous command before execution
     save_prev_args(args, prev_args);
 
