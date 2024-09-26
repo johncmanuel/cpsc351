@@ -62,7 +62,6 @@ void execute(char **argv) {
         }
       }
     }
-
     // printf("print args\n");
     // for (int i = 0; i < length; i++) {
     //   printf("argv[%d]: %s\n", i, argv[i]);
@@ -70,7 +69,7 @@ void execute(char **argv) {
     //     printf("NULL\n");
     //   }
     // }
-    //
+
     if (execvp(argv[0], argv) < 0) {
       printf("Execution failed\n");
       exit(1);
@@ -97,7 +96,10 @@ int main(int arg, char *argv[]) {
     printf("%s > ", cwd);
     fgets(line, 1024, stdin);
     printf("line: %s", line);
+
+    // parse() doesn't set the last element to NULL, so do it manually.
     parse(line, args);
+    args[arr_len(args) - 1] = NULL;
 
     if (strcmp(args[0], "exit") == 0) {
       exit(0);
