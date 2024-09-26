@@ -5,12 +5,23 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+char *prev_args[64];
+
 int arr_len(char **arr) {
   int length = 0;
   while (arr[length] != NULL) {
     length++;
   }
   return length;
+}
+
+void save_prev_args(char **src, char **dst) {
+  int i = 0;
+  while (src[i] != NULL) {
+    dst[i] = strdup(src[i]);
+    i++;
+  }
+  dst[i] = NULL;
 }
 
 void parse(char *line, char **argv) {
@@ -24,7 +35,7 @@ void parse(char *line, char **argv) {
   *argv = NULL;
 }
 
-void execute(char **argv, char **prev_args) {
+void execute(char **argv) {
   pid_t pid;
   int status;
   if ((pid = fork()) < 0) {
@@ -51,16 +62,11 @@ void execute(char **argv, char **prev_args) {
       // wait for something
     }
   }
-  // Copy the current args to prev_args
-  for (int i = 0; i < arr_len(argv); i++) {
-    prev_args[i] = argv[i];
-  }
 }
 
 int main(int arg, char *argv[]) {
   char line[1024];
   char *args[64];
-  char *prev_args[64];
 
   while (1) {
     printf("shell> ");
@@ -92,7 +98,13 @@ int main(int arg, char *argv[]) {
         printf("No previous command\n");
         continue;
       }
+      printf("Executing previous command\n");
+      execute(prev_args);
+      continue;
     }
-    execute(args, prev_args);
+    // Track previous command before execution
+    save_prev_args(args, prev_args);
+
+    execute(args);
   }
 }
