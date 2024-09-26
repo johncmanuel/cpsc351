@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 char *prev_args[64];
+char cwd[1024];
 
 int arr_len(char **arr) {
   int length = 0;
@@ -32,7 +33,7 @@ void parse(char *line, char **argv) {
     while (*line != '\0' && *line != ' ' && *line != '\t' && *line != '\n')
       line++;
   }
-  *argv = NULL;
+  *argv = '\0';
 }
 
 void execute(char **argv) {
@@ -42,8 +43,6 @@ void execute(char **argv) {
     printf("Forking child process failed\n");
     exit(1);
   } else if (pid == 0) {
-    printf("command invoked: %s\n", argv[0]);
-
     // If last word is ECHO, then print the rest of the words for one word per
     // line
     int length = arr_len(argv);
@@ -64,7 +63,15 @@ void execute(char **argv) {
       }
     }
 
-    if (execvp(*argv, argv) < 0) {
+    // printf("print args\n");
+    // for (int i = 0; i < length; i++) {
+    //   printf("argv[%d]: %s\n", i, argv[i]);
+    //   if (argv[i] == NULL) {
+    //     printf("NULL\n");
+    //   }
+    // }
+    //
+    if (execvp(argv[0], argv) < 0) {
       printf("Execution failed\n");
       exit(1);
     }
@@ -79,8 +86,15 @@ int main(int arg, char *argv[]) {
   char line[1024];
   char *args[64];
 
+  // Get current working directory
+  if (getcwd(cwd, sizeof(cwd)) != NULL) {
+    printf("Current directory: %s\n", cwd);
+  } else {
+    perror("getcwd() error");
+  }
+
   while (1) {
-    printf("shell> ");
+    printf("%s > ", cwd);
     fgets(line, 1024, stdin);
     printf("line: %s", line);
     parse(line, args);
