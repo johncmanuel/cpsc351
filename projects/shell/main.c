@@ -5,6 +5,14 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+int arr_len(char **arr) {
+  int length = 0;
+  while (arr[length] != NULL) {
+    length++;
+  }
+  return length;
+}
+
 void parse(char *line, char **argv) {
   while (*line != '\0') {
     while (*line == ' ' || *line == '\t' || *line == '\n')
@@ -13,7 +21,7 @@ void parse(char *line, char **argv) {
     while (*line != '\0' && *line != ' ' && *line != '\t' && *line != '\n')
       line++;
   }
-  *argv = '\0';
+  *argv = NULL;
 }
 
 void execute(char **argv) {
@@ -23,6 +31,19 @@ void execute(char **argv) {
     printf("Forking child process failed\n");
     exit(1);
   } else if (pid == 0) {
+    printf("command invoked - argv[0]: %s\n", argv[0]);
+
+    // If last word is ECHO, then print the rest of the words for one word per
+    // line
+    int length = arr_len(argv);
+    if (strcmp(argv[length - 2], "ECHO") == 0) {
+      int i = 1;
+      while (argv[i] != NULL) {
+        printf("%s\n", argv[i]);
+        i++;
+      }
+    }
+
     if (execvp(*argv, argv) < 0) {
       printf("Execution failed\n");
       exit(1);
@@ -30,6 +51,7 @@ void execute(char **argv) {
   } else {
     while (wait(&status) != pid) {
       // wait for something
+      printf("hello");
     }
   }
 }
