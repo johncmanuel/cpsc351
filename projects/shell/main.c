@@ -90,6 +90,58 @@ void execute(char **argv) {
   }
 }
 
+void process_pipe_cmds(char **argv1, char **argv2) {
+  int p[2];
+  int pid1, pid2;
+
+  if (pipe(p) < 0) {
+    perror("Pipe failed");
+    exit(1);
+  }
+
+  pid1 = fork();
+
+  if (pid1 < 0) {
+    perror("Fork for first command failed");
+    exit(1);
+  }
+
+  if (pid1 == 0) {
+    dup2(p[1], STDOUT_FILENO);
+    close(p[0]);
+    close(p[1]);
+
+    if (execvp(argv1[0], argv1) < 0) {
+      perror("Execution of first command failed");
+      exit(1);
+    }
+  }
+
+  pid2 = fork();
+
+  if (pid2 < 0) {
+    perror("Fork for second command failed");
+    exit(1);
+  }
+
+  if (pid2 == 0) {
+    dup2(p[0], STDIN_FILENO);
+    close(p[1]);
+    close(p[0]);
+
+    if (execvp(argv2[0], argv2) < 0) {
+      perror("Execution of second command failed");
+      exit(1);
+    }
+  }
+
+  close(p[0]);
+  close(p[1]);
+
+  // waitpid(pid1, NULL, 0);
+  // waitpid(pid2, NULL, 0);
+}
+
 int main(int arg, char *argv[]) {
   char line[1024];
   char *args[64];
