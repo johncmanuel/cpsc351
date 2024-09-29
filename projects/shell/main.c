@@ -35,6 +35,13 @@ void get_cwd(char *cwd, size_t size) {
   }
 }
 
+void help() {
+  printf("This is a simple Unix shell program\n");
+  printf("Here are the following commands:\n");
+  printf("cd, mkdir, exit, !!");
+  printf("Type 'exit' to exit the shell\n");
+}
+
 void parse(char *line, char **argv) {
   while (*line != '\0') {
     while (*line == ' ' || *line == '\t' || *line == '\n')
@@ -72,14 +79,6 @@ void execute(char **argv) {
         }
       }
     }
-    // printf("print args\n");
-    // for (int i = 0; i < length; i++) {
-    //   printf("argv[%d]: %s\n", i, argv[i]);
-    //   if (argv[i] == NULL) {
-    //     printf("NULL\n");
-    //   }
-    // }
-
     if (execvp(argv[0], argv) < 0) {
       printf("Execution failed\n");
       exit(1);
@@ -110,10 +109,7 @@ int main(int arg, char *argv[]) {
     if (strcmp(args[0], "exit") == 0) {
       exit(0);
     } else if (strcmp(args[0], "help") == 0) {
-      printf("This is a simple Unix shell program\n");
-      printf("Here are the following commands:\n");
-      printf("cd, mkdir, exit, !!");
-      printf("Type 'exit' to exit the shell\n");
+      help();
       continue;
     } else if (strcmp(args[0], "!!") == 0) {
       if (prev_args[0] == NULL) {
