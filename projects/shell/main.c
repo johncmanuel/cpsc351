@@ -16,8 +16,6 @@ int arr_len(char **arr) {
   return length;
 }
 
-int run_cd(char *path) { return chdir(path); }
-
 void save_prev_args(char **src, char **dst) {
   int i = 0;
   while (src[i] != NULL) {
@@ -150,7 +148,7 @@ int main(int arg, char *argv[]) {
   get_cwd(cwd, sizeof(cwd));
 
   while (1) {
-    printf("%s > ", cwd);
+    printf("theshell > ");
     fgets(line, 1024, stdin);
     printf("line: %s", line);
 
@@ -176,7 +174,7 @@ int main(int arg, char *argv[]) {
         printf("No directory provided\n");
         continue;
       }
-      if (run_cd(args[1]) == 0) {
+      if (chdir(args[1]) == 0) {
         printf("Changed directory to %s\n", args[1]);
         get_cwd(cwd, sizeof(cwd));
       } else {
