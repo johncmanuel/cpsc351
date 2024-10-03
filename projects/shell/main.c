@@ -48,44 +48,7 @@ void parse(char *line, char **argv) {
     while (*line != '\0' && *line != ' ' && *line != '\t' && *line != '\n')
       line++;
   }
-  *argv = '\0';
-}
-
-void execute(char **argv) {
-  pid_t pid;
-  int status;
-  if ((pid = fork()) < 0) {
-    printf("Forking child process failed\n");
-    exit(1);
-  } else if (pid == 0) {
-    // If last word is ECHO, then print the rest of the words for one word per
-    // line
-    int length = arr_len(argv);
-    if (strcmp(argv[length - 2], "ECHO") == 0) {
-      for (int i = 0; i < length - 1; i++) {
-        printf("%s\n", argv[i]);
-
-        // There is technically a space char for each argument provided
-        // so, print SPACE until the last argument, ECHO
-        if (i != length - 2) {
-          printf("SPACE\n");
-        }
-
-        // Print PIPE if the current argument is a pipe character
-        if (strcmp(argv[i], "|") == 0) {
-          printf("PIPE\n");
-        }
-      }
-    }
-    if (execvp(argv[0], argv) < 0) {
-      printf("Execution failed\n");
-      exit(1);
-    }
-  } else {
-    while (wait(&status) != pid) {
-      // wait for something
-    }
-  }
+  *argv = NULL;
 }
 
 void process_pipe_cmds(char **argv1, char **argv2) {
@@ -138,6 +101,55 @@ void process_pipe_cmds(char **argv1, char **argv2) {
 
   // waitpid(pid1, NULL, 0);
   // waitpid(pid2, NULL, 0);
+}
+
+void execute(char **argv) {
+  pid_t pid;
+  int status;
+
+  // Check for pipe
+  char **pipe_pos = argv;
+  while (*pipe_pos != NULL && strcmp(*pipe_pos, "|") != 0) {
+    pipe_pos++;
+  }
+
+  if (*pipe_pos != NULL) {
+    *pipe_pos = NULL;
+    process_pipe_cmds(argv, pipe_pos + 1);
+  } else {
+
+    if ((pid = fork()) < 0) {
+      printf("Forking child process failed\n");
+      exit(1);
+    } else if (pid == 0) {
+      // If last word is ECHO, then print the rest of the words for one word per
+      // line
+      int length = arr_len(argv);
+      if (strcmp(argv[length - 2], "ECHO") == 0) {
+        for (int i = 0; i < length - 1; i++) {
+          printf("%s\n", argv[i]);
+
+          // There is technically a space char for each argument provided
+          // so, print SPACE until the last argument, ECHO
+          if (i != length - 2) {
+            printf("SPACE\n");
+          }
+
+          if (strcmp(argv[i], "|") == 0) {
+            printf("PIPE\n");
+          }
+        }
+      }
+      if (execvp(argv[0], argv) < 0) {
+        printf("Execution failed\n");
+        exit(1);
+      }
+    } else {
+      while (wait(&status) != pid) {
+        // wait for something
+      }
+    }
+  }
 }
 
 int main(int arg, char *argv[]) {
