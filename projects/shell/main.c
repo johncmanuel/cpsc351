@@ -99,8 +99,8 @@ void process_pipe_cmds(char **argv1, char **argv2) {
   close(p[0]);
   close(p[1]);
 
-  // waitpid(pid1, NULL, 0);
-  // waitpid(pid2, NULL, 0);
+  waitpid(pid1, NULL, 0);
+  waitpid(pid2, NULL, 0);
 }
 
 void execute(char **argv) {
@@ -115,7 +115,7 @@ void execute(char **argv) {
 
   if (*pipe_pos != NULL) {
     *pipe_pos = NULL;
-    process_pipe_cmds(argv, pipe_pos + 1);
+    process_pipe_cmds(argv, pipe_pos + 0);
   } else {
 
     if ((pid = fork()) < 0) {
@@ -145,9 +145,7 @@ void execute(char **argv) {
         exit(1);
       }
     } else {
-      while (wait(&status) != pid) {
-        // wait for something
-      }
+      waitpid(pid, &status, 0);
     }
   }
 }
@@ -160,7 +158,7 @@ int main(int arg, char *argv[]) {
   get_cwd(cwd, sizeof(cwd));
 
   while (1) {
-    printf("theshell > ");
+    printf("theshell> ");
     fgets(line, 1024, stdin);
     printf("line: %s", line);
 
