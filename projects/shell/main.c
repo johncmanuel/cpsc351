@@ -5,8 +5,12 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-char *prev_args[64];
-char cwd[1024];
+#define MAX_ARGS_SIZE 64
+#define MAX_BUFFER_SIZE 1024
+
+// Track prev args and cwd
+char *prev_args[MAX_ARGS_SIZE];
+char cwd[MAX_BUFFER_SIZE];
 
 int arr_len(char **arr) {
   int length = 0;
@@ -29,14 +33,15 @@ void get_cwd(char *cwd, size_t size) {
   if (getcwd(cwd, size) != NULL) {
     printf("Current directory: %s\n", cwd);
   } else {
-    perror("getcwd() error");
+    printf("getcwd() error");
   }
 }
 
 void help() {
-  printf("This is a simple Unix shell program\n");
+  printf("This is John's Unix shell program!\n");
   printf("Here are the following commands:\n");
-  printf("cd, mkdir, exit, !!");
+  printf("cd, mkdir, exit, !!\n");
+  printf("You can also use pipes (|) and command redirections!\n");
   printf("Type 'exit' to exit the shell\n");
 }
 
@@ -48,19 +53,18 @@ void parse(char *line, char **argv) {
     while (*line != '\0' && *line != ' ' && *line != '\t' && *line != '\n')
       line++;
   }
-  *argv = NULL;
+  // *argv = NULL;
 }
 
 void process_pipe_cmds(char **argv1, char **argv2) {
   int p[2];
-  int pid1, pid2;
 
   if (pipe(p) < 0) {
     perror("Pipe failed");
     exit(1);
   }
 
-  pid1 = fork();
+  int pid1 = fork();
 
   if (pid1 < 0) {
     perror("Fork for first command failed");
@@ -73,15 +77,15 @@ void process_pipe_cmds(char **argv1, char **argv2) {
     close(p[1]);
 
     if (execvp(argv1[0], argv1) < 0) {
-      perror("Execution of first command failed");
+      printf("Execution of first command failed");
       exit(1);
     }
   }
 
-  pid2 = fork();
+  int pid2 = fork();
 
   if (pid2 < 0) {
-    perror("Fork for second command failed");
+    printf("Fork for second command failed");
     exit(1);
   }
 
@@ -91,7 +95,7 @@ void process_pipe_cmds(char **argv1, char **argv2) {
     close(p[0]);
 
     if (execvp(argv2[0], argv2) < 0) {
-      perror("Execution of second command failed");
+      printf("Execution of second command failed");
       exit(1);
     }
   }
@@ -107,7 +111,7 @@ void execute(char **argv) {
   pid_t pid;
   int status;
 
-  // Check for pipe
+  // Check for any pipes in the argument list,
   char **pipe_pos = argv;
   while (*pipe_pos != NULL && strcmp(*pipe_pos, "|") != 0) {
     pipe_pos++;
@@ -115,9 +119,9 @@ void execute(char **argv) {
 
   if (*pipe_pos != NULL) {
     *pipe_pos = NULL;
-    process_pipe_cmds(argv, pipe_pos + 0);
+    char **argv2 = pipe_pos + 1;
+    process_pipe_cmds(argv, argv2);
   } else {
-
     if ((pid = fork()) < 0) {
       printf("Forking child process failed\n");
       exit(1);
@@ -151,18 +155,16 @@ void execute(char **argv) {
 }
 
 int main(int arg, char *argv[]) {
-  char line[1024];
-  char *args[64];
+  char line[MAX_BUFFER_SIZE];
+  char *args[MAX_ARGS_SIZE];
 
   // Get current working directory
   get_cwd(cwd, sizeof(cwd));
 
   while (1) {
     printf("theshell> ");
-    fgets(line, 1024, stdin);
-    printf("line: %s", line);
+    fgets(line, MAX_BUFFER_SIZE, stdin);
 
-    // parse() doesn't set the last element to NULL, so do it manually.
     parse(line, args);
     args[arr_len(args) - 1] = NULL;
 
@@ -173,11 +175,10 @@ int main(int arg, char *argv[]) {
       continue;
     } else if (strcmp(args[0], "!!") == 0) {
       if (prev_args[0] == NULL) {
-        printf("No previous command\n");
-        continue;
+        printf("No previous command supplied\n");
+      } else {
+        execute(prev_args);
       }
-      printf("Executing previous command\n");
-      execute(prev_args);
       continue;
     } else if (strcmp(args[0], "cd") == 0) {
       if (args[1] == NULL) {

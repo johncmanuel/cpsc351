@@ -8,80 +8,30 @@
       "version": "18.1.8",
       "systems": {
         "aarch64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/r05x7gzyxq4j1yj6vqbjwcc41yaab948-clang-wrapper-18.1.8",
-              "default": true
-            }
-          ],
           "store_path": "/nix/store/r05x7gzyxq4j1yj6vqbjwcc41yaab948-clang-wrapper-18.1.8"
         },
         "x86_64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/4rz4z2bkb68vwbdxcwq0jxh2fyhhiqkh-clang-wrapper-18.1.8",
-              "default": true
-            }
-          ],
           "store_path": "/nix/store/4rz4z2bkb68vwbdxcwq0jxh2fyhhiqkh-clang-wrapper-18.1.8"
         }
       }
     },
     "python@3.12.4": {
       "last_modified": "2024-08-14T11:41:26Z",
-      "plugin_version": "0.0.4",
+      "plugin_version": "0.0.3",
       "resolved": "github:NixOS/nixpkgs/0cb2fd7c59fed0cd82ef858cbcbdb552b9a33465#python3",
       "source": "devbox-search",
       "version": "3.12.4",
       "systems": {
         "aarch64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/xnm9sbp02pp2704dvx4kb8g0yxn263pn-python3-3.12.4",
-              "default": true
-            }
-          ],
           "store_path": "/nix/store/xnm9sbp02pp2704dvx4kb8g0yxn263pn-python3-3.12.4"
         },
         "aarch64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/wviq85xs5awfp75mj5sjq9mn1nkqhq12-python3-3.12.4",
-              "default": true
-            },
-            {
-              "name": "debug",
-              "path": "/nix/store/cglyj6nr5rcr0j9c36xqvybk5rj7hi6x-python3-3.12.4-debug"
-            }
-          ],
           "store_path": "/nix/store/wviq85xs5awfp75mj5sjq9mn1nkqhq12-python3-3.12.4"
         },
         "x86_64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/dc7kp6g4s76jlfjhjdpibjfc8pglhlcs-python3-3.12.4",
-              "default": true
-            }
-          ],
           "store_path": "/nix/store/dc7kp6g4s76jlfjhjdpibjfc8pglhlcs-python3-3.12.4"
         },
         "x86_64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/04gg5w1s662l329a8kh9xcwyp0k64v5a-python3-3.12.4",
-              "default": true
-            },
-            {
-              "name": "debug",
-              "path": "/nix/store/w2ycb82p1q4xdpm2pzcqk7k58f89wv6l-python3-3.12.4-debug"
-            }
-          ],
           "store_path": "/nix/store/04gg5w1s662l329a8kh9xcwyp0k64v5a-python3-3.12.4"
         }
       }
@@ -94,43 +44,15 @@
       "version": "1.27.1",
       "systems": {
         "aarch64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/8n1fnihj1lxgwj2gmk54nwshv37d67a4-rustup-1.27.1",
-              "default": true
-            }
-          ],
           "store_path": "/nix/store/8n1fnihj1lxgwj2gmk54nwshv37d67a4-rustup-1.27.1"
         },
         "aarch64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/bzmspl6g6lxgqpg64mmbn1q8306rbxn1-rustup-1.27.1",
-              "default": true
-            }
-          ],
           "store_path": "/nix/store/bzmspl6g6lxgqpg64mmbn1q8306rbxn1-rustup-1.27.1"
         },
         "x86_64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/6plkfpnj2zvn5dq6ln8r7jh40w7230jh-rustup-1.27.1",
-              "default": true
-            }
-          ],
           "store_path": "/nix/store/6plkfpnj2zvn5dq6ln8r7jh40w7230jh-rustup-1.27.1"
         },
         "x86_64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/sd66x947abmdpga7b148khk9i4g7kv43-rustup-1.27.1",
-              "default": true
-            }
-          ],
           "store_path": "/nix/store/sd66x947abmdpga7b148khk9i4g7kv43-rustup-1.27.1"
         }
       }
