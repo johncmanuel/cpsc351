@@ -38,7 +38,7 @@ void get_cwd(char *cwd, size_t size) {
 }
 
 void help() {
-  printf("This is John's Unix shell program!\n");
+  printf("This is jcsh, John Carlo's Shell!\n");
   printf("Here are the following commands:\n");
   printf("cd, mkdir, exit, !!\n");
   printf("You can also use pipes (|) and command redirections!\n");
@@ -50,14 +50,16 @@ void help() {
 // each argument on a new line
 void check_for_echo(char **argv) {
   int length = arr_len(argv);
-  if (strcmp(argv[length - 2], "ECHO") == 0) {
+  if (strcmp(argv[length - 1], "ECHO") == 0) {
     for (int i = 0; i < length - 1; i++) {
       printf("%s\n", argv[i]);
+
       // There is technically a space char for each argument provided
       // so, print SPACE until the last argument, ECHO
       if (i != length - 2) {
         printf("SPACE\n");
       }
+
       if (strcmp(argv[i], "|") == 0) {
         printf("PIPE\n");
       }
@@ -66,13 +68,14 @@ void check_for_echo(char **argv) {
 }
 
 void parse_user_input(char *line, char **argv) {
-  while (*line != '\0') {
-    while (*line == ' ' || *line == '\t' || *line == '\n')
-      *line++ = '\0';
-    *argv++ = line;
-    while (*line != '\0' && *line != ' ' && *line != '\t' && *line != '\n')
-      line++;
+  int num_args = 0;
+  char *token = strtok(line, " \n");
+
+  while (token != NULL && num_args < MAX_ARGS_SIZE) {
+    argv[num_args++] = token;
+    token = strtok(NULL, " \n");
   }
+  argv[num_args] = NULL;
 }
 
 // Supports only two commands
@@ -166,14 +169,24 @@ int main(int arg, char *argv[]) {
   get_cwd(cwd, sizeof(cwd));
 
   while (1) {
-    printf("theshell> ");
-    fgets(line, MAX_BUFFER_SIZE, stdin);
+    printf("jcsh> ");
+
+    char *chars = fgets(line, MAX_BUFFER_SIZE, stdin);
+    if (chars == NULL) {
+      fprintf(stderr, "Error reading input\n");
+      return 1;
+    }
+
+    line[strlen(line) - 1] = '\0';
     parse_user_input(line, args);
 
     check_for_echo(args);
 
+    // Remove ECHO from end of args before executing
     int length = arr_len(args);
-    args[length - 1] = NULL;
+    if (strcmp(args[length - 1], "ECHO") == 0) {
+      args[length - 1] = NULL;
+    }
 
     if (strcmp(args[0], "exit") == 0) {
       exit(0);
