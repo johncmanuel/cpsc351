@@ -148,9 +148,6 @@ void execute_args(char **argv) {
       printf("Forking child process failed\n");
       exit(1);
     } else if (pid == 0) {
-      // If last word is ECHO, then print the rest of the words for one word per
-      // line
-      // check_for_echo(argv);
       if (execvp(argv[0], argv) < 0) {
         printf("Execution failed\n");
         exit(1);
@@ -172,6 +169,8 @@ int main(int arg, char *argv[]) {
     printf("theshell> ");
     fgets(line, MAX_BUFFER_SIZE, stdin);
     parse_user_input(line, args);
+
+    check_for_echo(args);
 
     int length = arr_len(args);
     args[length - 1] = NULL;
