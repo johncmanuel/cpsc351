@@ -1,3 +1,4 @@
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -41,7 +42,8 @@ void help() {
   printf("This is jcsh, John Carlo's Shell!\n");
   printf("Here are the following commands:\n");
   printf("cd, mkdir, exit, !!\n");
-  printf("You can also use pipes (|) and command redirections!\n");
+  printf(
+      "You can also use pipes (|) and command redirections (>, >>, <, <<)!\n");
   printf("Type 'exit' to exit the shell\n");
 }
 
@@ -130,15 +132,45 @@ void process_pipe_cmds(char **argv1, char **argv2) {
   waitpid(pid2, NULL, 0);
 }
 
+int process_redirection(char **argv) {
+  for (int i = 0; argv[i] != NULL; i++) {
+    int fd = 0;
+    if (strcmp(argv[i], ">") == 0 || strcmp(argv[i], ">>") == 0 ||
+        strcmp(argv[i], "<") == 0 || strcmp(argv[i], "<<") == 0) {
+      if (argv[i + 1] == NULL) {
+        printf("No file specified for redirection\n");
+        return -1;
+      }
+      if (strcmp(argv[i], "<") == 0 || strcmp(argv[i], "<<") == 0) {
+        fd = open(argv[i + 1], O_RDONLY);
+        dup2(fd, STDIN_FILENO);
+      } else {
+        fd = open(argv[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        dup2(fd, STDOUT_FILENO);
+      }
+      if (fd < 0) {
+        printf("Failed to open file");
+        return -1;
+      }
+      close(fd);
+      argv[i] = NULL;
+      i++;
+    }
+  }
+  return 0;
+}
+
 void execute_args(char **argv) {
   pid_t pid;
   int status;
 
-  // Check for any pipes in the argument list and increment its position once
-  // found
+  // Check for any pipes in the argument list and increment its position and
+  // count once found
   char **pipe_pos = argv;
+  int pipe_count = 0;
   while (*pipe_pos != NULL && strcmp(*pipe_pos, "|") != 0) {
     pipe_pos++;
+    pipe_count++;
   }
 
   if (*pipe_pos != NULL) {
@@ -151,6 +183,9 @@ void execute_args(char **argv) {
       printf("Forking child process failed\n");
       exit(1);
     } else if (pid == 0) {
+      if (process_redirection(argv) < 0) {
+        exit(1);
+      }
       if (execvp(argv[0], argv) < 0) {
         printf("Execution failed\n");
         exit(1);
@@ -169,15 +204,15 @@ int main(int arg, char *argv[]) {
   get_cwd(cwd, sizeof(cwd));
 
   while (1) {
-    printf("jcsh> ");
+    printf("jcsh > ");
 
     char *chars = fgets(line, MAX_BUFFER_SIZE, stdin);
     if (chars == NULL) {
       fprintf(stderr, "Error reading input\n");
       return 1;
     }
-
     line[strlen(line) - 1] = '\0';
+
     parse_user_input(line, args);
 
     check_for_echo(args);
