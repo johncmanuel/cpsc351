@@ -1,3 +1,8 @@
+// John Carlo Manuel
+// CPSC 351
+// Unix Shell Project
+// 10-5-24
+
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
