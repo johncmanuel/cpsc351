@@ -161,38 +161,36 @@ int process_redirection(char **argv) {
 }
 
 void execute_args(char **argv) {
-  pid_t pid;
-  int status;
-
   // Check for any pipes in the argument list and increment its position and
   // count once found
   char **pipe_pos = argv;
-  int pipe_count = 0;
   while (*pipe_pos != NULL && strcmp(*pipe_pos, "|") != 0) {
     pipe_pos++;
-    pipe_count++;
   }
 
   if (*pipe_pos != NULL) {
     *pipe_pos = NULL;
     char **argv2 = pipe_pos + 1;
     process_pipe_cmds(argv, argv2);
-  } else {
-    pid = fork();
-    if (pid < 0) {
-      printf("Forking child process failed\n");
+    return;
+  }
+
+  pid_t pid = fork();
+  int status;
+
+  if (pid < 0) {
+    printf("Forking child process failed\n");
+    exit(1);
+  } else if (pid == 0) {
+    if (process_redirection(argv) < 0) {
       exit(1);
-    } else if (pid == 0) {
-      if (process_redirection(argv) < 0) {
-        exit(1);
-      }
-      if (execvp(argv[0], argv) < 0) {
-        printf("Execution failed\n");
-        exit(1);
-      }
-    } else {
-      waitpid(pid, &status, 0);
     }
+    if (execvp(argv[0], argv) < 0) {
+      printf("Execution failed\n");
+      exit(1);
+    }
+  } else {
+    waitpid(pid, &status, 0);
   }
 }
 
@@ -211,8 +209,8 @@ int main(int arg, char *argv[]) {
       fprintf(stderr, "Error reading input\n");
       return 1;
     }
-    line[strlen(line) - 1] = '\0';
 
+    line[strlen(line) - 1] = '\0';
     parse_user_input(line, args);
 
     check_for_echo(args);
