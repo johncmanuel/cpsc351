@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -13,6 +14,16 @@
 char *prev_args[MAX_ARGS_SIZE];
 char cwd[MAX_BUFFER_SIZE];
 
+char *builtin_cmds[] = {"cd", "exit", "help", "!!", "mkdir"};
+
+// Declare builtin cmds functions
+int run_cd(char **argv);
+int run_help();
+void run_exit();
+int run_prev_cmd();
+int run_mkdir(char **argv);
+int run_shell(char **argv);
+
 int arr_len(char **arr) {
   int length = 0;
   while (arr[length] != NULL) {
@@ -23,7 +34,7 @@ int arr_len(char **arr) {
 
 void save_prev_args(char **src, char **dst) {
   int i = 0;
-  while (src[i] != NULL) {
+  while (src[i] != NULL && i < MAX_ARGS_SIZE) {
     dst[i] = strdup(src[i]);
     i++;
   }
@@ -36,15 +47,6 @@ void get_cwd(char *cwd, size_t size) {
   } else {
     printf("getcwd() error");
   }
-}
-
-void help() {
-  printf("This is jcsh, John Carlo's Shell!\n");
-  printf("Here are the following commands:\n");
-  printf("cd, mkdir, exit, !!\n");
-  printf(
-      "You can also use pipes (|) and command redirections (>, >>, <, <<)!\n");
-  printf("Type 'exit' to exit the shell\n");
 }
 
 // Checks for ECHO at end of the argument list and
@@ -161,6 +163,7 @@ int process_redirection(char **argv) {
 }
 
 void execute_args(char **argv) {
+
   // Check for any pipes in the argument list and increment its position and
   // count once found
   char **pipe_pos = argv;
@@ -194,6 +197,86 @@ void execute_args(char **argv) {
   }
 }
 
+int run_cd(char **argv) {
+  if (argv[1] == NULL) {
+    printf("No directory provided\n");
+    return 1;
+  }
+  if (chdir(argv[1]) == 0) {
+    get_cwd(cwd, sizeof(cwd));
+  } else {
+    printf("Failed to change directory\n");
+  }
+  return 1;
+}
+
+int run_prev_cmd() {
+  if (prev_args[0] == NULL) {
+    printf("No previous command supplied\n");
+  } else {
+    run_shell(prev_args);
+  }
+  return 1;
+}
+
+int run_mkdir(char **argv) {
+  if (argv[1] == NULL) {
+    printf("No directory provided\n");
+    return 1;
+  }
+  if (mkdir(argv[1], 0700) != 0) {
+    printf("Failed to create directory\n");
+  }
+  return 1;
+}
+
+void run_exit() { exit(0); }
+
+int run_help() {
+  printf("This is jcsh, John Carlo's Shell!\n");
+  printf("Here are the following commands:\n");
+  printf("cd, mkdir, exit, !!\n");
+  printf(
+      "You can also use pipes (|) and command redirections (>, >>, <, <<)!\n");
+  printf("Type 'exit' to exit the shell\n");
+  return 1;
+}
+
+int run_shell(char **argv) {
+  if (argv[0] == NULL) {
+    return 1;
+  }
+  check_for_echo(argv);
+
+  // Remove ECHO from end of args before executing
+  int length = arr_len(argv);
+  if (strcmp(argv[length - 1], "ECHO") == 0) {
+    argv[length - 1] = NULL;
+  }
+
+  // Check for builtin commands
+  for (int i = 0; i < sizeof(builtin_cmds) / sizeof(char *); i++) {
+    if (strcmp(argv[0], builtin_cmds[i]) == 0) {
+      printf("Executing builtin command: %s\n", argv[0]);
+      int status = 0;
+      if (strcmp(argv[0], "cd") == 0) {
+        status = run_cd(argv);
+      } else if (strcmp(argv[0], "exit") == 0) {
+        run_exit();
+      } else if (strcmp(argv[0], "help") == 0) {
+        status = run_help();
+      } else if (strcmp(argv[0], "!!") == 0) {
+        status = run_prev_cmd();
+      } else if (strcmp(argv[0], "mkdir") == 0) {
+        status = run_mkdir(argv);
+      }
+      return status;
+    }
+  }
+
+  return 0;
+}
+
 int main(int arg, char *argv[]) {
   char line[MAX_BUFFER_SIZE];
   char *args[MAX_ARGS_SIZE];
@@ -213,43 +296,17 @@ int main(int arg, char *argv[]) {
     line[strlen(line) - 1] = '\0';
     parse_user_input(line, args);
 
-    check_for_echo(args);
-
-    // Remove ECHO from end of args before executing
-    int length = arr_len(args);
-    if (strcmp(args[length - 1], "ECHO") == 0) {
-      args[length - 1] = NULL;
-    }
-
-    if (strcmp(args[0], "exit") == 0) {
-      exit(0);
-    } else if (strcmp(args[0], "help") == 0) {
-      help();
-      continue;
-    } else if (strcmp(args[0], "!!") == 0) {
-      if (prev_args[0] == NULL) {
-        printf("No previous command supplied\n");
-      } else {
-        execute_args(prev_args);
-      }
-      continue;
-    } else if (strcmp(args[0], "cd") == 0) {
-      if (args[1] == NULL) {
-        printf("No directory provided\n");
-        continue;
-      }
-      if (chdir(args[1]) == 0) {
-        get_cwd(cwd, sizeof(cwd));
-      } else {
-        printf("Failed to change directory\n");
-      }
+    if (run_shell(args) == 1) {
+      save_prev_args(args, prev_args);
       continue;
     }
 
-    // Track previous command before execution
-    save_prev_args(args, prev_args);
+    printf("Executing command: %s\n", args[0]);
 
     execute_args(args);
+
+    // Track previous command before execution
+    save_prev_args(argv, prev_args);
   }
   return 0;
 }
