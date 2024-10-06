@@ -262,7 +262,6 @@ int run_shell(char **argv) {
   // Check for builtin commands
   for (int i = 0; i < sizeof(builtin_cmds) / sizeof(char *); i++) {
     if (strcmp(argv[0], builtin_cmds[i]) == 0) {
-      printf("Executing builtin command: %s\n", argv[0]);
       int status = 0;
       if (strcmp(argv[0], "cd") == 0) {
         status = run_cd(argv);
@@ -305,8 +304,6 @@ int main(int arg, char *argv[]) {
       save_prev_args(args, prev_args);
       continue;
     }
-
-    printf("Executing command: %s\n", args[0]);
 
     execute_args(args);
 
