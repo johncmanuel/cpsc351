@@ -15,6 +15,76 @@
         }
       }
     },
+    "glibc@latest": {
+      "last_modified": "2024-10-06T21:15:53Z",
+      "resolved": "github:NixOS/nixpkgs/c8a17040be4a20b29589cb4043a9e0c36af1930e#glibc",
+      "source": "devbox-search",
+      "version": "2.39-52",
+      "systems": {
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/mvsq4z2g9l05vfwdkr9nihbxyxm18nak-glibc-2.39-52",
+              "default": true
+            },
+            {
+              "name": "bin",
+              "path": "/nix/store/f6avack1dn0m6iyfb0szgnvwjngphia0-glibc-2.39-52-bin",
+              "default": true
+            },
+            {
+              "name": "static",
+              "path": "/nix/store/ysxjhqyqlxp5hpvxzv20anagqis0psf7-glibc-2.39-52-static"
+            },
+            {
+              "name": "debug",
+              "path": "/nix/store/f7gav6n03mvan1ab556ih8dnyq8p4g1m-glibc-2.39-52-debug"
+            },
+            {
+              "name": "dev",
+              "path": "/nix/store/970mrbrvg7gnbhgm59smc2vmc5wv91s3-glibc-2.39-52-dev"
+            },
+            {
+              "name": "getent",
+              "path": "/nix/store/ynwy3gb68pmp74asvd95wnfdigkn31sf-glibc-2.39-52-getent"
+            }
+          ],
+          "store_path": "/nix/store/mvsq4z2g9l05vfwdkr9nihbxyxm18nak-glibc-2.39-52"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/3dyw8dzj9ab4m8hv5dpyx7zii8d0w6fi-glibc-2.39-52",
+              "default": true
+            },
+            {
+              "name": "bin",
+              "path": "/nix/store/k4jv8fr725amxalmplzhnlyik93wvk3z-glibc-2.39-52-bin",
+              "default": true
+            },
+            {
+              "name": "dev",
+              "path": "/nix/store/wlavaybjbzgllhq11lib6qgr7rm8imgp-glibc-2.39-52-dev"
+            },
+            {
+              "name": "getent",
+              "path": "/nix/store/jimhqfkgwjcp12wylw64xcwa6il5nx47-glibc-2.39-52-getent"
+            },
+            {
+              "name": "static",
+              "path": "/nix/store/y6bk80q2srr75db0psplh0k3x74bjnrd-glibc-2.39-52-static"
+            },
+            {
+              "name": "debug",
+              "path": "/nix/store/xgac3z4w4iillaq7wsa8mlc3z7i0hwhc-glibc-2.39-52-debug"
+            }
+          ],
+          "store_path": "/nix/store/3dyw8dzj9ab4m8hv5dpyx7zii8d0w6fi-glibc-2.39-52"
+        }
+      }
+    },
     "python@3.12.4": {
       "last_modified": "2024-08-14T11:41:26Z",
       "plugin_version": "0.0.3",
@@ -56,6 +126,10 @@
           "store_path": "/nix/store/sd66x947abmdpga7b148khk9i4g7kv43-rustup-1.27.1"
         }
       }
+    },
+    "stdenv.cc.cc.lib": {
+      "resolved": "github:NixOS/nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c#stdenv.cc.cc.lib",
+      "source": "nixpkg"
     }
   }
 }
