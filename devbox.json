@@ -5,7 +5,8 @@
     "python@3.12.4",
     "clang@18.1.8",
     "glibc@latest",
-    "stdenv.cc.cc.lib"
+    "stdenv.cc.cc.lib",
+    "valgrind-light@3.23.0"
   ],
   "shell": {
     "init_hook": [
