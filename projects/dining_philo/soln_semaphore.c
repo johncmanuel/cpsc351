@@ -42,5 +42,10 @@ int main() {
     state[i] = THINKING;
   }
 
+  // Create threads
+  for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
+    pthread_create(&threads[i], NULL, run_philosopher, (void *)&i);
+  }
+
   return 0;
 }
