@@ -7,12 +7,30 @@
 enum PhilosopherState { THINKING, HUNGRY, EATING };
 
 const int NUM_PHILOSOPHERS = 5;
+
+// Create a semaphore for each philosopher
 sem_t mutex;
 sem_t s[NUM_PHILOSOPHERS];
+
+// Track state of each philosopher
 int state[NUM_PHILOSOPHERS];
 
 // Thread function representing the philosopher
-void run_philosopher() {}
+void *run_philosopher(void *arg) {
+  int i = *(int *)arg;
+
+  while (1) {
+    printf("Philosopher %d is thinking\n", i);
+    sleep(1);
+
+    printf("Philosopher %d is hungry\n", i);
+    // Pick up fork
+    sem_wait(&mutex);
+    state[i] = HUNGRY;
+    sem_post(&mutex);
+    sem_wait(&s[i]);
+  }
+}
 
 int main() {
   pthread_t threads[NUM_PHILOSOPHERS];
