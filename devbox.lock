@@ -85,6 +85,54 @@
         }
       }
     },
+    "python312Packages.tkinter@3.12.7": {
+      "last_modified": "2024-11-03T14:18:04Z",
+      "resolved": "github:NixOS/nixpkgs/4ae2e647537bcdbb82265469442713d066675275#python312Packages.tkinter",
+      "source": "devbox-search",
+      "version": "3.12.7",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/0na54zy5sv16ivsk122hn7p1yn1gnzsm-python3.12-tkinter-3.12.7",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/0na54zy5sv16ivsk122hn7p1yn1gnzsm-python3.12-tkinter-3.12.7"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/i01cjjn1ab6ind57adkp8ddxsmhksxw3-python3.12-tkinter-3.12.7",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/i01cjjn1ab6ind57adkp8ddxsmhksxw3-python3.12-tkinter-3.12.7"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/4p0ad0py36b1xacxzhs5g39bkald6240-python3.12-tkinter-3.12.7",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/4p0ad0py36b1xacxzhs5g39bkald6240-python3.12-tkinter-3.12.7"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/r2xfwic1dhnn6cfx3nlkwdxs1c2jivck-python3.12-tkinter-3.12.7",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/r2xfwic1dhnn6cfx3nlkwdxs1c2jivck-python3.12-tkinter-3.12.7"
+        }
+      }
+    },
     "python@3.12.4": {
       "last_modified": "2024-08-14T11:41:26Z",
       "plugin_version": "0.0.4",
