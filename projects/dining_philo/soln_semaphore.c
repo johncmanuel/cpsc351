@@ -6,60 +6,78 @@
 
 #define NUM_PHILOSOPHERS 5
 
-enum PhilosopherState { THINKING, HUNGRY, EATING };
-
-// Create a semaphore for each philosopher and a global lock
+enum { THINKING, HUNGRY, EATING } state[NUM_PHILOSOPHERS];
+sem_t chopsticks[NUM_PHILOSOPHERS];
 sem_t mutex;
-sem_t forks[NUM_PHILOSOPHERS];
 
-// Track global state of each philosopher
-int state[NUM_PHILOSOPHERS];
+void think(int i) {
+  printf("P#%d THINKING\n", i);
+  sleep(1);
+}
 
-// Thread function representing the philosopher
+void pick_up(int i) {
+  sem_wait(&mutex);
+  state[i] = HUNGRY;
+  printf("P#%d picked up chopstick\n", i);
+  sem_post(&mutex);
+  sem_wait(&chopsticks[i]);
+}
+
+void put_down(int i) {}
+
 void *run_philosopher(void *arg) {
   int i = *(int *)arg;
+  int left_neighbor = i;
+  int right_neighbor = (i + 1) % NUM_PHILOSOPHERS;
 
   while (1) {
-    // Pick up fork when hungry
-    sem_wait(&mutex);
-    state[i] = HUNGRY;
-    sem_post(&mutex);
-    sem_wait(&forks[i]);
+    think(i);
 
-    printf("Philosopher %d is eating\n", i);
+    // Hungry state
+    if (left_neighbor % 2 == 0) {
+      sem_wait(&chopsticks[left_neighbor]);
+      printf("P#%d picked up left chopstick", i);
+      sem_wait(&chopsticks[right_neighbor]);
+      printf("P#%d picked up right chopstick", i);
+    } else {
+      sem_wait(&chopsticks[right_neighbor]);
+      sem_wait(&chopsticks[left_neighbor]);
+    }
+
+    // Eating state, so sleep for 1 second
     sleep(1);
 
-    // Put down fork when done eating
+    sem_post(&chopsticks[left_neighbor]);
+    sem_post(&chopsticks[right_neighbor]);
   }
+
+  return NULL;
 }
 
 int main() {
   pthread_t philosophers[NUM_PHILOSOPHERS];
   int philo_id[NUM_PHILOSOPHERS];
 
-  // Initialize semaphores and philosopher state
   sem_init(&mutex, 0, 1);
   for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
-    sem_init(&forks[i], 0, 0);
+    sem_init(&chopsticks[i], 0, 0);
+    // Everyone starts off thinking
     state[i] = THINKING;
   }
 
-  // Create threads
   for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
     philo_id[i] = i;
     pthread_create(&philosophers[i], NULL, run_philosopher,
                    (void *)&philo_id[i]);
   }
 
-  // Perform waits on threads
   for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
     pthread_join(philosophers[i], NULL);
   }
 
-  // Destroy mutex and semaphores
   sem_destroy(&mutex);
   for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
-    sem_destroy(&forks[i]);
+    sem_destroy(&chopsticks[i]);
   }
 
   return 0;
