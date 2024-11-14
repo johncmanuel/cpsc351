@@ -6,24 +6,25 @@
 
 #define NUM_PHILOSOPHERS 5
 
-enum { THINKING, HUNGRY, EATING } state[NUM_PHILOSOPHERS];
+enum { THINKING, HUNGRY, EATING, WAITING } state[NUM_PHILOSOPHERS];
 sem_t chopsticks[NUM_PHILOSOPHERS];
 sem_t mutex;
+
+void can_eat(int i) {}
 
 void think(int i) {
   printf("P#%d THINKING\n", i);
   sleep(1);
 }
 
-void pick_up(int i) {
+void pick_up_chopsticks(int i) {
   sem_wait(&mutex);
   state[i] = HUNGRY;
-  printf("P#%d picked up chopstick\n", i);
   sem_post(&mutex);
   sem_wait(&chopsticks[i]);
 }
 
-void put_down(int i) {}
+void put_down_chopsticks(int i) {}
 
 void *run_philosopher(void *arg) {
   int i = *(int *)arg;
@@ -61,8 +62,6 @@ int main() {
   sem_init(&mutex, 0, 1);
   for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
     sem_init(&chopsticks[i], 0, 0);
-    // Everyone starts off thinking
-    state[i] = THINKING;
   }
 
   for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
