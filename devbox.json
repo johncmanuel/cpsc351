@@ -8,7 +8,11 @@
       "excluded_platforms": ["x86_64-darwin"]
     },
     "stdenv.cc.cc.lib":          "",
-    "python312Packages.tkinter": "3.12.7"
+    "python312Packages.tkinter": "3.12.7",
+    "valgrind-light": {
+      "version":            "3.23.0",
+      "excluded_platforms": ["x86_64-darwin"]
+    }
   },
   "shell": {
     "init_hook": [

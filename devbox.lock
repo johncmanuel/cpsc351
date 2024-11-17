@@ -157,6 +157,114 @@
     "stdenv.cc.cc.lib": {
       "resolved": "github:NixOS/nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c#stdenv.cc.cc.lib",
       "source": "nixpkg"
+    },
+    "valgrind-light@3.23.0": {
+      "last_modified": "2024-09-08T08:36:32Z",
+      "resolved": "github:NixOS/nixpkgs/17fb773308a8558abaa05b5df71cdaf3e5208e66#valgrind-light",
+      "source": "devbox-search",
+      "version": "3.23.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/mwmxjyqx0zgkahd15rz7y7dla59zid22-valgrind-3.23.0",
+              "default": true
+            },
+            {
+              "name": "man",
+              "path": "/nix/store/ialnrxx0d70f2qk89s5hqwg4a905dvvj-valgrind-3.23.0-man",
+              "default": true
+            },
+            {
+              "name": "dev",
+              "path": "/nix/store/q5rpdfqyw809a1wd8hs0w27mbrzycyn0-valgrind-3.23.0-dev"
+            },
+            {
+              "name": "doc",
+              "path": "/nix/store/nhvzpk3xxb349mjqmp2vvsn48b8hxjbq-valgrind-3.23.0-doc"
+            }
+          ],
+          "store_path": "/nix/store/mwmxjyqx0zgkahd15rz7y7dla59zid22-valgrind-3.23.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/38k3874h38gsyp4cpv79g5rfb4nprf63-valgrind-3.23.0",
+              "default": true
+            },
+            {
+              "name": "man",
+              "path": "/nix/store/21xzfddasa6pj1qa0mrji4x6rqmx6a55-valgrind-3.23.0-man",
+              "default": true
+            },
+            {
+              "name": "dev",
+              "path": "/nix/store/vrj60hwd8dj86biwmax0gg1ac11vfb6x-valgrind-3.23.0-dev"
+            },
+            {
+              "name": "doc",
+              "path": "/nix/store/c8nrf3pl08zc55dlhqz6b86sivg5brp6-valgrind-3.23.0-doc"
+            },
+            {
+              "name": "debug",
+              "path": "/nix/store/hw69hlcjr13i80i1lp6h8bs1jgrhb1xg-valgrind-3.23.0-debug"
+            }
+          ],
+          "store_path": "/nix/store/38k3874h38gsyp4cpv79g5rfb4nprf63-valgrind-3.23.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/1gh2mdq1fb556l01d4a7grbz5cfhgbrn-valgrind-3.23.0",
+              "default": true
+            },
+            {
+              "name": "man",
+              "path": "/nix/store/vk0kx12d381p1d3yy0f3r8c7zg5qif0m-valgrind-3.23.0-man",
+              "default": true
+            },
+            {
+              "name": "dev",
+              "path": "/nix/store/xfis9bxs6w9d8wv8ybkq355p4g5wvmx1-valgrind-3.23.0-dev"
+            },
+            {
+              "name": "doc",
+              "path": "/nix/store/sh7hypdjv57pxdysm1wz6h49hn8qp392-valgrind-3.23.0-doc"
+            }
+          ],
+          "store_path": "/nix/store/1gh2mdq1fb556l01d4a7grbz5cfhgbrn-valgrind-3.23.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/356iq1ia68m8dzqxbwfjnpj17qb0d02j-valgrind-3.23.0",
+              "default": true
+            },
+            {
+              "name": "man",
+              "path": "/nix/store/sha7ai6p7z9s1h2z4h6cxq2lxklnwz17-valgrind-3.23.0-man",
+              "default": true
+            },
+            {
+              "name": "doc",
+              "path": "/nix/store/39dbzjd6s38a2s1j1w87j1i5gmfyqaqa-valgrind-3.23.0-doc"
+            },
+            {
+              "name": "debug",
+              "path": "/nix/store/j2jv82a9valg6rjsbml74lrlnjhz3wzn-valgrind-3.23.0-debug"
+            },
+            {
+              "name": "dev",
+              "path": "/nix/store/i2c9zi82q5cgrx6waq5803rzaq5m28l7-valgrind-3.23.0-dev"
+            }
+          ],
+          "store_path": "/nix/store/356iq1ia68m8dzqxbwfjnpj17qb0d02j-valgrind-3.23.0"
+        }
+      }
     }
   }
 }
