@@ -12,6 +12,11 @@
     "valgrind-light": {
       "version":            "3.23.0",
       "excluded_platforms": ["x86_64-darwin"]
+    },
+    "rustup": "1.27.1",
+    "libiconv": {
+      "version":   "2.40",
+      "platforms": ["x86_64-darwin"]
     }
   },
   "shell": {
