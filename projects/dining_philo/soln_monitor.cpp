@@ -1,38 +1,77 @@
 #include <array>
+#include <condition_variable>
+#include <iostream>
+#include <mutex>
 #include <thread>
+#include <vector>
 
 class Monitor {
 
 private:
-  enum { THINKING, HUNGRY, EATING } state[5];
+  static const int NUM_PHILOSOPHERS = 5;
+  enum { THINKING, HUNGRY, EATING } state[NUM_PHILOSOPHERS];
+  std::mutex mtx;
+
+  // represent each philosopher as a condition variable
+  std::array<std::condition_variable, NUM_PHILOSOPHERS> cv;
+
   void can_eat(int i) {
-    if (state[(i + 4) % 5] != EATING && state[i] == HUNGRY &&
-        state[(i + 1) % 5] != EATING) {
+    int left = (i + 4) % NUM_PHILOSOPHERS;
+    int right = (i + 1) % NUM_PHILOSOPHERS;
+    if (state[left] != EATING && state[i] == HUNGRY && state[right] != EATING) {
       state[i] = EATING;
-      // signal state[i]
-      // state[i].signal(), something like that
+      cv[i].notify_one();
     }
   }
 
 public:
   Monitor() {
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
       state[i] = THINKING;
     }
   }
   void get(int i) {
+    std::unique_lock<std::mutex> lock(mtx);
     state[i] = HUNGRY;
     can_eat(i);
     if (state[i] != EATING) {
-      // wait state[i]
-      // state[i].wait()
+      cv[i].wait(lock);
     }
   }
   void put(int i) {
+    int left = (i + 4) % NUM_PHILOSOPHERS;
+    int right = (i + 1) % NUM_PHILOSOPHERS;
+
+    std::unique_lock<std::mutex> lock(mtx);
     state[i] = THINKING;
-    can_eat((i + 4) % 5);
-    can_eat((i + 1) % 5);
+    can_eat(left);
+    can_eat(right);
+  }
+
+  constexpr int num_philosophers() { return NUM_PHILOSOPHERS; }
+
+  void run(int i) {
+    while (true) {
+      // print state of each philosopher
+      for (int j = 0; j < NUM_PHILOSOPHERS; j++) {
+        printf("\t");
+      }
+      std::cout << "Thread id=" << std::this_thread::get_id() << std::endl;
+    }
   }
 };
 
-int main() { std::array<std::thread, 5> philosophers; }
+int main() {
+  std::vector<Monitor> m;
+  std::vector<std::thread> philosophers;
+
+  for (int i = 0; i < 5; i++) {
+    philosophers.push_back(std::thread(&Monitor::run, &m[i], i));
+  }
+
+  for (auto &p : philosophers) {
+    p.join();
+  }
+
+  return 0;
+}

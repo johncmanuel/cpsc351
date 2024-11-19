@@ -3,3 +3,9 @@ If:
   PathExclude: [.*\.cpp, .*\.hpp]
 CompileFlags:
   Add: [-std=gnu17]
+
+---
+If:
+  PathExclude: [.*\.cpp, .*\.hpp]
+CompileFlags:
+  Add: [-std=c++17]
