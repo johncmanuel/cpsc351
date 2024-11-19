@@ -1,4 +1,5 @@
 #include <array>
+// #include <chrono>
 #include <condition_variable>
 #include <iostream>
 #include <mutex>
@@ -39,34 +40,46 @@ public:
     }
   }
   void put(int i) {
+    std::unique_lock<std::mutex> lock(mtx);
+
     int left = (i + 4) % NUM_PHILOSOPHERS;
     int right = (i + 1) % NUM_PHILOSOPHERS;
 
-    std::unique_lock<std::mutex> lock(mtx);
     state[i] = THINKING;
     can_eat(left);
     can_eat(right);
   }
 
-  constexpr int num_philosophers() { return NUM_PHILOSOPHERS; }
-
+  // NOTE: using std::cout or other iostream functions can lead to segementation
+  // faults since they are shared resources
   void run(int i) {
-    while (true) {
+    for (int k = 0; k < 10; k++) {
       // print state of each philosopher
-      for (int j = 0; j < NUM_PHILOSOPHERS; j++) {
-        printf("\t");
-      }
-      std::cout << "Thread id=" << std::this_thread::get_id() << std::endl;
+      // for (int j = 0; j < NUM_PHILOSOPHERS; j++) {
+      //   printf("\t");
+      // }
+      printf("test");
+      // std::cout << "Thread id=" << std::this_thread::get_id() << std::endl;
+      // std::cout << "P#" << i << " " << state[i] << std::endl;
+      // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+      // Get chopsticks
+      // get(i);
+      //
+      // // Eat with chopsticks
+      // // ...
+      //
+      // put(i);
     }
   }
 };
 
 int main() {
-  std::vector<Monitor> m;
+  Monitor m;
   std::vector<std::thread> philosophers;
 
   for (int i = 0; i < 5; i++) {
-    philosophers.push_back(std::thread(&Monitor::run, &m[i], i));
+    philosophers.push_back(std::thread(&Monitor::run, &m, i));
   }
 
   for (auto &p : philosophers) {

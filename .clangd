@@ -8,4 +8,4 @@ CompileFlags:
 If:
   PathExclude: [.*\.cpp, .*\.hpp]
 CompileFlags:
-  Add: [-std=c++17]
+  Add: [-std=c++11]
