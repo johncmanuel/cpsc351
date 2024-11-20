@@ -48,8 +48,12 @@ void can_eat(int i) {
 
 void pick_up(int i) {
   sem_wait(&m);
+
   state[i] = HUNGRY;
   log_states();
+
+  can_eat(i);
+
   sem_post(&m);
   sem_wait(&chopsticks[i]);
 }
