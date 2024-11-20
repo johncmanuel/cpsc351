@@ -8,10 +8,12 @@
 
 enum { THINKING, HUNGRY, EATING } state[NUM_PHILOSOPHERS];
 sem_t chopsticks[NUM_PHILOSOPHERS];
-sem_t mutex;
+sem_t m;
+int print_count = 0;
 
 void log_states() {
   printf("\n");
+
   for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
     printf("P%d ", i);
     switch (state[i]) {
@@ -26,12 +28,18 @@ void log_states() {
       break;
     }
   }
+
+  print_count++;
+  if (print_count % 5 == 0)
+    printf("\n");
   fflush(stdout);
 }
 
 void can_eat(int i) {
-  if (state[i] == HUNGRY && state[(i + 1) % NUM_PHILOSOPHERS] != EATING &&
-      state[(i + NUM_PHILOSOPHERS - 1) % NUM_PHILOSOPHERS] != EATING) {
+  int left = (i + 4) % NUM_PHILOSOPHERS;
+  int right = (i + 1) % NUM_PHILOSOPHERS;
+
+  if (state[i] == HUNGRY && state[left] != EATING && state[right] != EATING) {
     state[i] = EATING;
     log_states();
     sem_post(&chopsticks[i]);
@@ -39,20 +47,24 @@ void can_eat(int i) {
 }
 
 void pick_up(int i) {
-  sem_wait(&mutex);
+  sem_wait(&m);
   state[i] = HUNGRY;
   log_states();
-  sem_post(&mutex);
+  sem_post(&m);
   sem_wait(&chopsticks[i]);
 }
 
 void put_down(int i) {
-  sem_wait(&mutex);
+  sem_wait(&m);
+
+  int left = (i + 4) % NUM_PHILOSOPHERS;
+  int right = (i + 1) % NUM_PHILOSOPHERS;
   state[i] = THINKING;
+
   log_states();
-  can_eat((i + 1) % NUM_PHILOSOPHERS);
-  can_eat((i + NUM_PHILOSOPHERS - 1) % NUM_PHILOSOPHERS);
-  sem_post(&mutex);
+  can_eat(left);
+  can_eat(right);
+  sem_post(&m);
 }
 
 void *run(void *arg) {
@@ -72,7 +84,7 @@ int main() {
   pthread_t philosophers[NUM_PHILOSOPHERS];
   int philo_id[NUM_PHILOSOPHERS];
 
-  sem_init(&mutex, 0, 1);
+  sem_init(&m, 0, 1);
   for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
     sem_init(&chopsticks[i], 0, 0);
     state[i] = THINKING;
@@ -89,7 +101,7 @@ int main() {
     pthread_join(philosophers[i], NULL);
   }
 
-  sem_destroy(&mutex);
+  sem_destroy(&m);
   for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
     sem_destroy(&chopsticks[i]);
   }

@@ -31,6 +31,7 @@ private:
 
   void log_state() {
     std::cout << "\n";
+
     for (int i = 0; i < N; i++) {
       std::cout << "P" << i << " ";
 
@@ -48,10 +49,8 @@ private:
     }
 
     print_count++;
-
     if (print_count % 5 == 0)
       std::cout << "\n";
-
     std::cout.flush();
   }
 
