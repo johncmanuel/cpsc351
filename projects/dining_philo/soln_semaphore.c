@@ -6,50 +6,63 @@
 
 #define NUM_PHILOSOPHERS 5
 
-enum { THINKING, HUNGRY, EATING, WAITING } state[NUM_PHILOSOPHERS];
+enum { THINKING, HUNGRY, EATING } state[NUM_PHILOSOPHERS];
 sem_t chopsticks[NUM_PHILOSOPHERS];
 sem_t mutex;
 
-void can_eat(int i) {}
-
-void think(int i) {
-  printf("P#%d THINKING\n", i);
-  sleep(1);
+void log_states() {
+  printf("\n");
+  for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
+    printf("P%d ", i);
+    switch (state[i]) {
+    case THINKING:
+      printf("THINKING   ");
+      break;
+    case HUNGRY:
+      printf("HUNGRY     ");
+      break;
+    case EATING:
+      printf("EATING     ");
+      break;
+    }
+  }
+  fflush(stdout);
 }
 
-void pick_up_chopsticks(int i) {
+void can_eat(int i) {
+  if (state[i] == HUNGRY && state[(i + 1) % NUM_PHILOSOPHERS] != EATING &&
+      state[(i + NUM_PHILOSOPHERS - 1) % NUM_PHILOSOPHERS] != EATING) {
+    state[i] = EATING;
+    log_states();
+    sem_post(&chopsticks[i]);
+  }
+}
+
+void pick_up(int i) {
   sem_wait(&mutex);
   state[i] = HUNGRY;
+  log_states();
   sem_post(&mutex);
   sem_wait(&chopsticks[i]);
 }
 
-void put_down_chopsticks(int i) {}
+void put_down(int i) {
+  sem_wait(&mutex);
+  state[i] = THINKING;
+  log_states();
+  can_eat((i + 1) % NUM_PHILOSOPHERS);
+  can_eat((i + NUM_PHILOSOPHERS - 1) % NUM_PHILOSOPHERS);
+  sem_post(&mutex);
+}
 
-void *run_philosopher(void *arg) {
+void *run(void *arg) {
   int i = *(int *)arg;
-  int left_neighbor = i;
-  int right_neighbor = (i + 1) % NUM_PHILOSOPHERS;
 
   while (1) {
-    think(i);
-
-    // Hungry state
-    if (left_neighbor % 2 == 0) {
-      sem_wait(&chopsticks[left_neighbor]);
-      printf("P#%d picked up left chopstick", i);
-      sem_wait(&chopsticks[right_neighbor]);
-      printf("P#%d picked up right chopstick", i);
-    } else {
-      sem_wait(&chopsticks[right_neighbor]);
-      sem_wait(&chopsticks[left_neighbor]);
-    }
-
-    // Eating state, so sleep for 1 second
     sleep(1);
-
-    sem_post(&chopsticks[left_neighbor]);
-    sem_post(&chopsticks[right_neighbor]);
+    pick_up(i);
+    sleep(1);
+    put_down(i);
   }
 
   return NULL;
@@ -62,13 +75,15 @@ int main() {
   sem_init(&mutex, 0, 1);
   for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
     sem_init(&chopsticks[i], 0, 0);
+    state[i] = THINKING;
   }
 
   for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
     philo_id[i] = i;
-    pthread_create(&philosophers[i], NULL, run_philosopher,
-                   (void *)&philo_id[i]);
+    pthread_create(&philosophers[i], NULL, run, &philo_id[i]);
   }
+
+  log_states();
 
   for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
     pthread_join(philosophers[i], NULL);

@@ -38,7 +38,8 @@
       "pip install -r requirements.txt"
     ],
     "scripts": {
-      "dp": "clang++ -Wall ./projects/dining_philo/soln_monitor.cpp -o ./projects/dining_philo/soln_monitor.o && ./projects/dining_philo/soln_monitor.o"
+      "dpm": "clang++ -Wall ./projects/dining_philo/soln_monitor.cpp -o ./projects/dining_philo/soln_monitor.o && ./projects/dining_philo/soln_monitor.o",
+      "dps": "clang -Wall ./projects/dining_philo/soln_semaphore.c -o ./projects/dining_philo/soln_semaphore.o && ./projects/dining_philo/soln_semaphore.o"
     }
   }
 }

@@ -6,6 +6,6 @@ CompileFlags:
 
 ---
 If:
-  PathExclude: [.*\.cpp, .*\.hpp]
+  PathExclude: [.*\.c, .*\.h]
 CompileFlags:
   Add: [-std=c++11]
