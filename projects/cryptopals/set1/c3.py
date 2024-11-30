@@ -24,7 +24,10 @@ def xor_cipher(text: str) -> str:
 
     res = ""
 
-    for key in range(256):
+    # there are 256 different possible keys in a single byte
+    possible_keys = 2**8
+
+    for key in range(possible_keys):
         plaintext = "".join(chr(byte ^ key) for byte in ciphertext)
 
         # Check if the plaintext is readable
