@@ -1,6 +1,8 @@
 .devbox
 .venv
 
+_cryptopals
+
 *.output
 
 # Prerequisites
