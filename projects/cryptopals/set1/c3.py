@@ -32,6 +32,7 @@ def xor_cipher(text: str) -> str:
 
         # Check if the plaintext is readable
         if all(char in printable_chars for char in plaintext):
+
             res += f"Key: {chr(key)} (0x{key:02x}), Decrypted: {plaintext}\n"
 
     return res

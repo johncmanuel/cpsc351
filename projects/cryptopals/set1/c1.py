@@ -24,7 +24,7 @@ def c1():
     assert (
         res == expected
     ), f"Expected output does not match: {res}\nExpected: {expected}"
-    print("Set 1 Challenge 1 is successful.\nOutput:", res, "\nExpected:", expected)
+    print("Set 1 Challenge 1 was successful.\nOutput:", res, "\nExpected:", expected)
 
 
 c1()

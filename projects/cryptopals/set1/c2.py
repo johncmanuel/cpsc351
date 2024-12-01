@@ -13,7 +13,7 @@ def c2():
     assert (
         res == expected
     ), f"Expected output does not match: {res}\nExpected: {expected}"
-    print("Set 1 Challenge 2 is successful.\nOutput:", res, "\nExpected:", expected)
+    print("Set 1 Challenge 2 was successful.\nOutput:", res, "\nExpected:", expected)
 
 
 c2()
