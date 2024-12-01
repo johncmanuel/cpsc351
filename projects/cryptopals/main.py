@@ -9,7 +9,9 @@ def main(directory: str):
         print(f"The path '{directory}' is not a valid directory.")
         return
 
-    python_files = [file for file in os.listdir(directory) if file.endswith(".py")]
+    python_files = sorted(
+        [file for file in os.listdir(directory) if file.endswith(".py")]
+    )
 
     if not python_files:
         print("No Python files found in the directory.")
