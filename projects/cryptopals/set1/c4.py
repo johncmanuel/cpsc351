@@ -2,8 +2,7 @@ import string
 
 
 def hex_to_bytes(hex_string: str):
-    if len(hex_string) % 2 != 0:
-        raise ValueError("Hex string must have an even length")
+    assert len(hex_string) % 2 == 0, "Hex string must have an even length"
 
     res = []
 
