@@ -13,6 +13,10 @@ def hemming_distance(s1: str, s2: str) -> int:
 
 
 def c6():
+    d = {}
+    with open("./set1/input/c6.txt") as f:
+        data = f.read().splitlines()
+        print(data)
     x = "this is a test"
     y = "wokka wokka!!!"
     res = hemming_distance(x, y)
