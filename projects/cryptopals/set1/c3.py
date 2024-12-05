@@ -34,7 +34,7 @@ def xor_cipher(text: str) -> str:
             likely_plaintxt.append((score, key, plaintext))
 
     if likely_plaintxt:
-        return max(likely_plaintxt, key=lambda x: x[0])[2]
+        return max(likely_plaintxt, key=lambda x: x[0])[2].rstrip()
     return ""
 
 
@@ -48,4 +48,5 @@ def c3():
     print("Set 1 Challenge 3 was successful.\nOutput:", res, "\nExpected:", expected)
 
 
-c3()
+if __name__ == "__main__":
+    c3()

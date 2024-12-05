@@ -19,4 +19,5 @@ def c5():
     print("Repeating key XOR successful:", res)
 
 
-c5()
+if __name__ == "__main__":
+    c5()

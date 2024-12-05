@@ -27,4 +27,5 @@ def c1():
     print("Set 1 Challenge 1 was successful.\nOutput:", res, "\nExpected:", expected)
 
 
-c1()
+if __name__ == "__main__":
+    c1()

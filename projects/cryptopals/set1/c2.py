@@ -16,4 +16,5 @@ def c2():
     print("Set 1 Challenge 2 was successful.\nOutput:", res, "\nExpected:", expected)
 
 
-c2()
+if __name__ == "__main__":
+    c2()
