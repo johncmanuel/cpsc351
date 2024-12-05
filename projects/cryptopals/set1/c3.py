@@ -2,8 +2,7 @@ import string
 
 
 def hex_to_bytes(hex_string: str):
-    if len(hex_string) % 2 != 0:
-        raise ValueError("Hex string must have an even length")
+    assert len(hex_string) % 2 == 0, "Hex string must have an even length"
 
     res = []
 
@@ -17,31 +16,36 @@ def hex_to_bytes(hex_string: str):
 # Use brute force approach to decrypt the ciphertext by
 # trying all possible keys
 def xor_cipher(text: str) -> str:
-    ciphertext = hex_to_bytes(text)
+    data = hex_to_bytes(text)
 
     # all possible ASCII printable characters
     printable_chars = set(string.printable)
 
-    res = ""
+    likely_plaintxt = []
 
-    # there are 256 different possible keys in a single byte
+    # there are 256 (2^8 = 256) different possible keys in a single byte
     possible_keys = 2**8
 
     for key in range(possible_keys):
-        plaintext = "".join(chr(byte ^ key) for byte in ciphertext)
-
+        plaintext = "".join(chr(byte ^ key) for byte in data)
         # Check if the plaintext is readable
         if all(char in printable_chars for char in plaintext):
+            score = sum(1 for char in plaintext if char.isalpha() or char.isspace())
+            likely_plaintxt.append((score, key, plaintext))
 
-            res += f"Key: {chr(key)} (0x{key:02x}), Decrypted: {plaintext}\n"
-
-    return res
+    if likely_plaintxt:
+        return max(likely_plaintxt, key=lambda x: x[0])[2]
+    return "None found"
 
 
 def c3():
     string = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
     res = xor_cipher(string)
-    print("Output:", res)
+    expected = "Cooking MC's like a pound of bacon"
+    assert (
+        res == expected
+    ), f"Expected output does not match: {res}\nExpected: {expected}"
+    print("Set 1 Challenge 3 was successful.\nOutput:", res, "\nExpected:", expected)
 
 
 c3()
