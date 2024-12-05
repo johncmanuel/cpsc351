@@ -17,7 +17,11 @@
         "x86_64-darwin"
       ]
     },
-    "rustup": "1.27.1"
+    "rustup": "1.27.1",
+    "libiconv": {
+      "version":   "2.40",
+      "platforms": ["x86_64-darwin"]
+    }
   },
   "shell": {
     "init_hook": [
