@@ -26,7 +26,10 @@ def main(directory: str):
         print(f"Running: {python_file}")
         try:
             result = subprocess.run(
-                ["python", file_path], capture_output=True, text=True
+                ["python", file_path],
+                capture_output=True,
+                text=True,
+                cwd=os.path.dirname(os.path.abspath(__file__)),
             )
             print(f"Output of {python_file}:\n\n{result.stdout}")
             if result.stderr:
