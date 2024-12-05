@@ -1,7 +1,7 @@
 import string
 
 
-def hex_to_bytes(hex_string: str):
+def hex_to_bytes(hex_string: str) -> bytes:
     assert len(hex_string) % 2 == 0, "Hex string must have an even length"
 
     res = []

@@ -1,9 +1,12 @@
 def repeating_key_xor(s: str, key: str) -> str:
     s_bytes, key_bytes = s.encode(), key.encode()
     expanded_key = bytearray()
+
     for i in range(len(s_bytes)):
         expanded_key.append(key_bytes[i % len(key_bytes)])
+
     assert len(s_bytes) == len(expanded_key), "Lengths do not match"
+
     encrypted = bytes([a ^ b for a, b in zip(s_bytes, expanded_key)])
     return encrypted.hex()
 
