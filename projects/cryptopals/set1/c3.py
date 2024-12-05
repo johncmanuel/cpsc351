@@ -35,7 +35,7 @@ def xor_cipher(text: str) -> str:
 
     if likely_plaintxt:
         return max(likely_plaintxt, key=lambda x: x[0])[2]
-    return "None found"
+    return ""
 
 
 def c3():

@@ -1,39 +1,11 @@
-import string
+import sys
+import os
 
+# https://stackoverflow.com/questions/16981921/relative-imports-in-python-3
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
 
-def hex_to_bytes(hex_string: str):
-    assert len(hex_string) % 2 == 0, "Hex string must have an even length"
-
-    res = []
-
-    for i in range(0, len(hex_string), 2):
-        byte = int(hex_string[i : i + 2], 16)
-        res.append(byte)
-
-    return bytes(res)
-
-
-# Use brute force approach to decrypt the ciphertext by
-# trying all possible keys
-def xor_cipher(text: str) -> str:
-    ciphertext = hex_to_bytes(text)
-
-    # all possible ASCII printable characters
-    printable_chars = set(string.printable)
-
-    res = ""
-
-    # there are 256 different possible keys in a single byte
-    possible_keys = 2**8
-
-    for key in range(possible_keys):
-        plaintext = "".join(chr(byte ^ key) for byte in ciphertext)
-
-        # Check if the plaintext is readable
-        if all(char in printable_chars for char in plaintext):
-            res += f"Key: {chr(key)} (0x{key:02x}), Decrypted: {plaintext}\n"
-
-    return res
+from set1.c3 import hex_to_bytes, xor_cipher
 
 
 def c4():

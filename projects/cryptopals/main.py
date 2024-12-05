@@ -5,6 +5,8 @@ import subprocess
 
 def main(directory: str):
 
+    print(os.path.dirname(os.path.abspath(__file__)))
+
     if not os.path.isdir(directory):
         print(f"The path '{directory}' is not a valid directory.")
         return
