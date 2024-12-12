@@ -19,19 +19,14 @@
     },
     "rustup": "1.27.1",
     "libiconv": {
-      "version":   "2.40",
-      "platforms": ["x86_64-darwin"]
+      "version": "2.40",
+      "platforms": [
+        "x86_64-darwin"
+      ]
     }
   },
   "shell": {
     "init_hook": [
-      "projectDir=$(dirname $(readlink -f \"$0\"))",
-      "rustupHomeDir=\"$projectDir\"/.rustup",
-      "mkdir -p $rustupHomeDir",
-      "export RUSTUP_HOME=$rustupHomeDir",
-      "export LIBRARY_PATH=$LIBRARY_PATH:\"$projectDir/nix/profile/default/lib\"",
-      "rustup default stable",
-      "cargo fetch",
       ". $VENV_DIR/bin/activate",
       "pip install -r requirements.txt"
     ],

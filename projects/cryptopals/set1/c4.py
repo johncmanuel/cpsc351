@@ -1,4 +1,4 @@
-from set1.c3 import xor_cipher
+from set1.c3 import xor_cipher, hex_to_bytes
 
 
 def c4():
@@ -6,7 +6,7 @@ def c4():
         lines = f.read().splitlines()
         possible_char_strs = []
         for line in lines:
-            xc = xor_cipher(line)
+            xc = xor_cipher(hex_to_bytes(line))
             possible_char_strs.append(xc)
         res = max(
             possible_char_strs,

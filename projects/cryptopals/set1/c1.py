@@ -1,5 +1,7 @@
+BASE64_TABLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+
+
 def hex_to_base64(hex_str: str) -> str:
-    BASE64_TABLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
     base64_str = ""
 
     bin_str = ""

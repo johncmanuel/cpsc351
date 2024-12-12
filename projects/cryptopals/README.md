@@ -1,6 +1,6 @@
 # CPSC 351: cryptopals project
 
-## Run
+## How to Run
 
 ```bash
 # unix
