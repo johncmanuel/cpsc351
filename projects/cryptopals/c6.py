@@ -1,4 +1,4 @@
-from set1.c3 import xor_cipher
+from c3 import xor_cipher
 import string
 
 
@@ -61,7 +61,7 @@ def hemming_distance(s1: bytes, s2: bytes) -> int:
 
 
 def c6():
-    with open("./set1/input/c6.txt") as f:
+    with open("c6.txt") as f:
         data = f.read().splitlines()
         print(data)
     x = b"this is a test"

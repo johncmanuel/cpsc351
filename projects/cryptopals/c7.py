@@ -24,7 +24,7 @@ def base64_to_bytes(s: str) -> bytes:
 
 def c7():
     key = "YELLOW SUBMARINE"
-    with open("./set1/input/c7.txt") as f:
+    with open("c7.txt") as f:
         data = f.read().splitlines()
         ciphertext = base64_to_bytes("".join(data))
         if ciphertext:

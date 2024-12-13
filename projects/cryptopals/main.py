@@ -3,23 +3,28 @@ import sys
 import subprocess
 
 
-def main(directory: str):
+def main(directory: str | None = None):
 
     print(os.path.dirname(os.path.abspath(__file__)))
+
+    if not directory:
+        directory = os.path.dirname(os.path.abspath(__file__))
 
     if not os.path.isdir(directory):
         print(f"The path '{directory}' is not a valid directory.")
         return
 
     python_files = sorted(
-        [file for file in os.listdir(directory) if file.endswith(".py")]
+        [
+            file
+            for file in os.listdir(directory)
+            if file.endswith(".py") and file != "main.py"
+        ]
     )
 
     if not python_files:
         print("No Python files found in the directory.")
         return
-
-    print(f"Found {len(python_files)} Python file(s). Executing them...\n")
 
     for python_file in python_files:
         file_path = os.path.join(directory, python_file)
@@ -40,7 +45,7 @@ def main(directory: str):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python main.py <directory>")
-        sys.exit(1)
-    main(sys.argv[1])
+    if len(sys.argv) == 1:
+        main()
+    else:
+        main(sys.argv[1])

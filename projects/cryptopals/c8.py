@@ -20,7 +20,7 @@ def detect_aes_ecb(ciphertext: list[bytes]) -> tuple[int, int]:
 
 
 def c8():
-    with open("./set1/input/c8.txt") as f:
+    with open("c8.txt") as f:
         data = f.read().splitlines()
         encrypted = [hex_to_bytes(line) for line in data]
         res = detect_aes_ecb(encrypted)

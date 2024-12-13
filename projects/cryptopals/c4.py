@@ -1,8 +1,8 @@
-from set1.c3 import xor_cipher, hex_to_bytes
+from c3 import xor_cipher, hex_to_bytes
 
 
 def c4():
-    with open("./set1/input/c4.txt") as f:
+    with open("c4.txt") as f:
         lines = f.read().splitlines()
         possible_char_strs = []
         for line in lines:
