@@ -28,7 +28,7 @@ def c8():
         assert (
             res[0] == expected
         ), f"Expected output does not match: {res[0]}\nExpected: {expected}"
-    print("Set 1 Challenge 1 was successful.\nOutput:", res[0], "\nExpected:", expected)
+    print("Set 1 Challenge 8 was successful.\nOutput:", res[0], "\nExpected:", expected)
 
 
 if __name__ == "__main__":
