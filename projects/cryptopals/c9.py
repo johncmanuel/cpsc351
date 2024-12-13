@@ -3,19 +3,6 @@ def pkcs7_padding(plain_text: bytes, block_size: int) -> bytes:
     return plain_text + bytes([padding] * padding)
 
 
-def verify_pkcs7_padding(padded_text, block_size):
-    if len(padded_text) % block_size != 0:
-        return False
-
-    padding_length = padded_text[-1]
-
-    if padding_length == 0 or padding_length > block_size:
-        return False
-
-    padding_bytes = padded_text[-padding_length:]
-    return all(byte == padding_length for byte in padding_bytes)
-
-
 def c9():
     msg = b"YELLOW SUBMARINE"
     block_size = 20
