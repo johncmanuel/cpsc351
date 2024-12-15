@@ -3,11 +3,14 @@ from c3 import hex_to_bytes
 AES_BLOCK_SIZE_BYTES = 16
 
 
-def count_repeated_blocks(ciphertext: bytes) -> int:
-    blocks = [
-        ciphertext[i : i + AES_BLOCK_SIZE_BYTES]
-        for i in range(0, len(ciphertext), AES_BLOCK_SIZE_BYTES)
+def get_blocks(ciphertext: bytes, block_size: int) -> list[bytes]:
+    return [
+        ciphertext[i : i + block_size] for i in range(0, len(ciphertext), block_size)
     ]
+
+
+def count_repeated_blocks(ciphertext: bytes) -> int:
+    blocks = get_blocks(ciphertext, AES_BLOCK_SIZE_BYTES)
     return len(blocks) - len(set(blocks))
 
 
