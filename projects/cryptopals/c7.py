@@ -2,10 +2,10 @@ from Crypto.Cipher import AES
 from c1 import BASE64_TABLE
 
 
-def decrypt_aes_ecb(ciphertext: bytes, key: str) -> str:
+def decrypt_aes_ecb(ciphertext: bytes, key: str) -> bytes:
     cipher = AES.new(key.encode("utf-8"), AES.MODE_ECB)
     plaintext = cipher.decrypt(ciphertext)
-    return plaintext.decode("utf-8")
+    return plaintext
 
 
 def base64_to_bytes(s: str) -> bytes:
@@ -28,7 +28,7 @@ def c7():
         data = f.read().splitlines()
         ciphertext = base64_to_bytes("".join(data))
         if ciphertext:
-            plaintext = decrypt_aes_ecb(ciphertext, key)
+            plaintext = decrypt_aes_ecb(ciphertext, key).decode("utf-8")
             print(plaintext)
 
 
