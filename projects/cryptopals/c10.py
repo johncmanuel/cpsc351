@@ -9,7 +9,7 @@ def pkcs7_unpadding(data: bytes) -> bytes:
     return data[:-len_padding]
 
 
-def encrypt_aes_ecb(plaintext, key, iv):
+def encrypt_aes_cbc(plaintext, key, iv):
     cipher = AES.new(key, AES.MODE_ECB)
 
     plaintext = pkcs7_padding(plaintext, AES_BLOCK_SIZE_BYTES)
@@ -24,7 +24,7 @@ def encrypt_aes_ecb(plaintext, key, iv):
     return ciphertext
 
 
-def decrypt_aes_ecb(ciphertext, key, iv):
+def decrypt_aes_cbc(ciphertext, key, iv):
     cipher = AES.new(key, AES.MODE_ECB)
     blocks = get_blocks(ciphertext, AES_BLOCK_SIZE_BYTES)
 
@@ -44,8 +44,8 @@ def c10():
         data = f.read().splitlines()
         ciphertext = base64_to_bytes("".join(data))
         if ciphertext:
-            decrypted = decrypt_aes_ecb(ciphertext, key, iv)
-            encrypted = encrypt_aes_ecb(decrypted, key, iv)
+            decrypted = decrypt_aes_cbc(ciphertext, key, iv)
+            encrypted = encrypt_aes_cbc(decrypted, key, iv)
             print("Decrypted:", decrypted.decode())
             print("Does encrypted match the original input:", encrypted == ciphertext)
 
