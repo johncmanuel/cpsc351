@@ -1,9 +1,9 @@
-from c10 import encrypt_aes_cbc, decrypt_aes_cbc
+from c10 import encrypt_aes_cbc
 import os
 import random
 from c9 import pkcs7_padding
 from Crypto.Cipher import AES
-from c8 import AES_BLOCK_SIZE_BYTES, get_blocks
+from c8 import AES_BLOCK_SIZE_BYTES, count_repeated_blocks
 
 
 def encryption_oracle(input: str) -> tuple[bytes, str]:
@@ -25,10 +25,7 @@ def encryption_oracle(input: str) -> tuple[bytes, str]:
 
 
 def detect_ecb_or_cbc(encrypted: bytes) -> str:
-    blocks = get_blocks(encrypted, AES_BLOCK_SIZE_BYTES)
-    if len(blocks) > len(set(blocks)):
-        return "ECB"
-    return "CBC"
+    return "ECB" if count_repeated_blocks(encrypted) > 0 else "CBC"
 
 
 def c11():
