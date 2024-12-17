@@ -1,10 +1,10 @@
 from c3 import xor_cipher
-from c5 import repeating_key_xor, bytes_to_hex
+from c5 import repeating_key_xor
 import string
 from c7 import base64_to_bytes
 
 
-def break_repeating_key_xor(data: bytes) -> tuple[bytes, bytes]:
+def break_repeating_key_xor(data: bytes) -> tuple[int, bytes, bytes]:
     normalized_dsts = {}
     start_ks, end_ks = 2, 40
     printable_chars = set(string.printable)
@@ -22,7 +22,7 @@ def break_repeating_key_xor(data: bytes) -> tuple[bytes, bytes]:
     possible_key_sizes = sorted(normalized_dsts, key=normalized_dsts.get)[:3]
     possible_plaintexts = []
     final_res = []
-    print(f"Possible key sizes: {possible_key_sizes}")
+    # print(f"Possible key sizes: {possible_key_sizes}")
 
     for s in possible_key_sizes:
         key = b""
@@ -32,19 +32,21 @@ def break_repeating_key_xor(data: bytes) -> tuple[bytes, bytes]:
             key += bytes([xor_cipher(block)[1]])
         if not key:
             continue
-        print(f"Key: {key}")
+        # print(f"Key: {key}")
         r = repeating_key_xor(data, key)
         possible_plaintexts.append((key, r))
     # print(possible_plaintexts)
     # print(len(possible_plaintexts))
     for key, plaintext in possible_plaintexts:
+        plaintext = plaintext.decode()
         if all(char in printable_chars for char in plaintext):
+            # print(key, plaintext)
             score = sum(1 for char in plaintext if char.isalpha() or char.isspace())
             final_res.append((score, key, plaintext))
     # print(final_res)
     if final_res:
         return max(final_res, key=lambda x: x[0])
-    return b"", b""
+    return 0, b"", b""
 
 
 def hemming_distance(s1: bytes, s2: bytes) -> int:
@@ -62,7 +64,8 @@ def c6():
     with open("c6.txt") as f:
         data = f.read().replace("\n", "")
         data = base64_to_bytes(data)
-        res = break_repeating_key_xor(data)
+        score, key, plaintxt = break_repeating_key_xor(data)
+        print(f"Key: {key.decode()}\nPlaintext: {plaintxt}")
         print(res)
 
 
