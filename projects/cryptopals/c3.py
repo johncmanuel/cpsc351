@@ -15,7 +15,7 @@ def hex_to_bytes(hex_string: str) -> bytes:
 
 # Use brute force approach to decrypt the ciphertext by
 # trying all possible keys
-def xor_cipher(data: bytes) -> str:
+def xor_cipher(data: bytes) -> tuple[int, int, str]:
     printable_chars = set(string.printable)
     likely_plaintxt = []
 
@@ -30,13 +30,13 @@ def xor_cipher(data: bytes) -> str:
             likely_plaintxt.append((score, key, plaintext))
 
     if likely_plaintxt:
-        return max(likely_plaintxt, key=lambda x: x[0])[2].rstrip()
-    return ""
+        return max(likely_plaintxt, key=lambda x: x[0])
+    return 0, 0, ""
 
 
 def c3():
     string = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736"
-    res = xor_cipher(hex_to_bytes(string))
+    res = xor_cipher(hex_to_bytes(string))[2]
     expected = "Cooking MC's like a pound of bacon"
     assert (
         res == expected

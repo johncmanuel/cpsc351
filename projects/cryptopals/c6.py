@@ -16,26 +16,32 @@ def break_repeating_key_xor(data: bytes) -> tuple[bytes, bytes]:
             for j in range(i + 1, len(chunk_bytes)):
                 h = hemming_distance(chunk_bytes[i], chunk_bytes[j])
                 dst.append(h)
-        avg_dst = sum(dst) / len(dst) if dst else 0
+        avg_dst = sum(dst) / len(dst)
         normalized_dsts[ks] = avg_dst / ks
 
     possible_key_sizes = sorted(normalized_dsts, key=normalized_dsts.get)[:3]
     possible_plaintexts = []
     final_res = []
-    # print(normalized_dsts)
+    print(f"Possible key sizes: {possible_key_sizes}")
 
     for s in possible_key_sizes:
         key = b""
         for i in range(s):
             # transpose the blocks
             block = bytes([data[j] for j in range(i, len(data), s)])
-            key += xor_cipher(block).encode()
+            key += bytes([xor_cipher(block)[1]])
+        if not key:
+            continue
+        print(f"Key: {key}")
         r = repeating_key_xor(data, key)
         possible_plaintexts.append((key, r))
+    # print(possible_plaintexts)
+    # print(len(possible_plaintexts))
     for key, plaintext in possible_plaintexts:
         if all(char in printable_chars for char in plaintext):
             score = sum(1 for char in plaintext if char.isalpha() or char.isspace())
             final_res.append((score, key, plaintext))
+    # print(final_res)
     if final_res:
         return max(final_res, key=lambda x: x[0])
     return b"", b""
