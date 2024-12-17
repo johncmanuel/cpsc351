@@ -30,7 +30,7 @@ def detect_ecb_or_cbc(encrypted: bytes) -> str:
 
 def c11():
     repeated_input = "A" * 48
-    for _ in range(10):
+    for _ in range(20):
         encrypted, mode = encryption_oracle(repeated_input)
         detected_mode = detect_ecb_or_cbc(encrypted)
         print("Detected:", detected_mode, "Actual:", mode)
