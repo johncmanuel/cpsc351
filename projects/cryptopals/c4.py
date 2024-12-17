@@ -6,12 +6,12 @@ def c4():
         lines = f.read().splitlines()
         possible_char_strs = []
         for line in lines:
-            xc = xor_cipher(hex_to_bytes(line))
+            xc = xor_cipher(hex_to_bytes(line))[2]
             possible_char_strs.append(xc)
         res = max(
             possible_char_strs,
             key=lambda x: sum(1 for ch in x if ch.isalpha() or ch.isspace()),
-        )
+        ).strip()
         expected = "Now that the party is jumping"
         assert (
             res == expected
