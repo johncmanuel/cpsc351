@@ -70,4 +70,5 @@ def c6():
     assert res == 37, f"Unexpected result, output: {res}"
 
 
-c6()
+if __name__ == "__main__":
+    c6()
