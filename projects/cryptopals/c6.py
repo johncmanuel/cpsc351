@@ -66,7 +66,6 @@ def c6():
         data = base64_to_bytes(data)
         score, key, plaintxt = break_repeating_key_xor(data)
         print(f"Key: {key.decode()}\nPlaintext: {plaintxt}")
-        print(res)
 
 
 if __name__ == "__main__":
